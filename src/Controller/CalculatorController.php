@@ -61,23 +61,23 @@ class CalculatorController extends AbstractController
         $client = RedisAdapter::createConnection(
             'redis://127.0.0.1:6379'
         );
-        $memcached = new RedisAdapter($client);
+        $redis = new RedisAdapter($client);
 
-        $firstarg = $memcached->getItem('firstarg');
+        $firstarg = $redis->getItem('firstarg');
         $data = $request->get('firstarg') ;
         $firstarg->set($data);
-        $memcached->save($firstarg);
+        $redis->save($firstarg);
 
-        $secondarg = $memcached->getItem('secondarg');
+        $secondarg = $redis->getItem('secondarg');
         $data = $request->get('secondarg') ;
         $secondarg->set($data);
-        $memcached->save($secondarg);
+        $redis->save($secondarg);
 
 
-        $operation = $memcached->getItem('operation');
+        $operation = $redis->getItem('operation');
         $data = $request->get('operation') ;
         $operation->set($data);
-        $memcached->save($operation);
+        $redis->save($operation);
 
 
         return new JsonResponse([
@@ -92,14 +92,14 @@ class CalculatorController extends AbstractController
         $client = RedisAdapter::createConnection(
             'redis://127.0.0.1:6379'
         );
-        $memcached = new RedisAdapter($client);
-        $firstarg = $memcached->getItem('firstarg');
+        $redis = new RedisAdapter($client);
+        $firstarg = $redis->getItem('firstarg');
         $firstarg = $firstarg->get();
 
-        $secondarg = $memcached->getItem('secondarg');
+        $secondarg = $redis->getItem('secondarg');
         $secondarg = $secondarg->get();
 
-        $operation = $memcached->getItem('operation');
+        $operation = $redis->getItem('operation');
         $operation = $operation->get();
 
             return new JsonResponse([
