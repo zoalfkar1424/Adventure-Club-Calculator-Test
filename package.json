@@ -1,0 +1,16 @@
+{
+  "devDependencies": {
+    "@popperjs/core": "^2.11.8",
+    "@symfony/webpack-encore": "^4.4.0",
+    "bootstrap": "^5.3.1",
+    "file-loader": "^6.2.0",
+    "jquery": "^3.7.0",
+    "webpack-notifier": "^1.15.0"
+  },
+  "scripts": {
+    "encore": "encore"
+  },
+  "dependencies": {
+    "php-memcached": "^0.0.2"
+  }
+}

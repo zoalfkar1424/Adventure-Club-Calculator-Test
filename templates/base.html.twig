@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        {%endblock%}
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+        {% block javascripts %}
+            <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+            <script
+                    src="https://code.jquery.com/jquery-3.6.0.min.js"
+                    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+                    crossorigin="anonymous"
+            ></script>
+            <script>
+                const eventCalculate = document.getElementById('calculator_calculate');
+                const eventRestore = document.getElementById('calculator_restore');
+                const eventSave = document.getElementById('calculator_save');
+                if (eventCalculate) {
+                    eventCalculate. addEventListener('click', function() {
+                        var firstarg = document.getElementById('calculator_firstArgument').value;
+                        var secondarg = document.getElementById('calculator_secondArgument').value;
+                        var operation = document.getElementById('calculator_operation').value;
+
+                        $.ajax({
+                            url: '{{ path('get_values') }}',
+                            type: 'GET',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: {  firstarg: firstarg,secondarg:secondarg, operation: ''+operation},
+                            success: function(response) {
+                                document.getElementById('expandres').innerHTML = response.expression + " = " + response.result;
+                            },
+                            error: function(xhr, ajaxOptions, thrownError){
+                                alert(xhr.responseText);
+                            }
+                        });
+                    });
+                }
+
+                if (eventRestore) {
+                    eventRestore. addEventListener('click', function() {
+                        $.ajax({
+                            url: '{{ path('restore_values') }}',
+                            type: 'GET',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            success: function(response) {
+                                document.getElementById('calculator_firstArgument').value = response.firstarg;
+                                document.getElementById('calculator_secondArgument').value = response.secondarg;
+                                document.getElementById('calculator_operation').value = response.operation;
+                                document.getElementById('expandres').innerHTML ="";
+                            },
+                            error: function(xhr, ajaxOptions, thrownError){
+                                alert(xhr.responseText);
+                            }
+                        });
+                    });
+                }
+
+                if (eventSave) {
+                    eventSave. addEventListener('click', function() {
+                        var firstarg = document.getElementById('calculator_firstArgument').value;
+                        var secondarg = document.getElementById('calculator_secondArgument').value;
+                        var operation = document.getElementById('calculator_operation').value;
+
+                        $.ajax({
+                            url: '{{ path('save_values') }}',
+                            type: 'GET',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: {  firstarg: firstarg,secondarg:secondarg, operation: ''+operation},
+                            success: function(response) {
+                                document.getElementById('calculator_firstArgument').value = "";
+                                document.getElementById('calculator_secondArgument').value = "";
+                                document.getElementById('calculator_operation').value = "";
+                                document.getElementById('expandres').innerHTML = "";
+                            },
+                            error: function(xhr, ajaxOptions, thrownError){
+                                alert(xhr.responseText);
+                            }
+                        });
+                    });
+                }
+            </script>
+        {%endblock%}
+    </body>
+</html>
